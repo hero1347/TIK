@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>E-Learning TIK - PGMI UIN STS Jambi</title>
+<style>
+:root{--bg:#f6f8f7;--card:#fff;--tx:#1d2b27;--mut:#5d6f69;--pri:#0f7b6c;--pri2:#e1f3ef;--bd:#d8e2de;--ok:#1a7f4b;--bad:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101816;--card:#18231f;--tx:#e6efec;--mut:#9bb0a9;--pri:#3fc2ae;--pri2:#1b3a34;--bd:#2c3d38}}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--pri);color:#fff;padding:14px 18px}header h1{margin:0;font-size:18px}header p{margin:2px 0 8px;font-size:13px;opacity:.9}
+.bar{height:8px;background:rgba(255,255,255,.3);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:#fff;width:0;transition:.3s}
+.wrap{display:flex;gap:16px;max-width:1100px;margin:0 auto;padding:16px}
+nav{width:290px;flex:none}main{flex:1;min-width:0}
+.item{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--bd);color:var(--tx);padding:9px 11px;margin-bottom:6px;border-radius:10px;cursor:pointer;font:inherit;font-size:14px}
+.item.on{border-color:var(--pri);background:var(--pri2)}.item b{min-width:24px;color:var(--pri)}.item .d{margin-left:auto;color:var(--ok)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px}
+h2{margin:0 0 4px;font-size:21px}h3{margin:0 0 8px;font-size:16px;color:var(--pri)}.tag{display:inline-block;background:var(--pri2);color:var(--pri);border-radius:20px;padding:2px 10px;font-size:12px;margin-right:6px}
+.btn{display:inline-block;background:var(--pri);color:#fff;border:0;border-radius:9px;padding:9px 14px;font:inherit;font-size:14px;cursor:pointer;text-decoration:none;margin:4px 6px 4px 0}
+.btn.alt{background:var(--pri2);color:var(--pri)}.btn:disabled{opacity:.5}
+ul{margin:6px 0 0;padding-left:20px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--bd);padding:6px 8px;text-align:left}.sc{overflow-x:auto}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:9px;padding:8px 11px;margin:5px 0;font:inherit;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:rgba(26,127,75,.15)}.opt.no{border-color:var(--bad);background:rgba(192,57,43,.15)}
+.q p{font-weight:600;margin:12px 0 4px}.exp{font-size:13px;color:var(--mut)}label.ck{display:flex;gap:8px;align-items:center;cursor:pointer;margin-top:10px}
+@media(max-width:760px){.wrap{flex-direction:column}nav{width:100%}#list{display:none}#list.show{display:block}#tg{display:inline-block}}
+#tg{display:none;margin-bottom:8px}
+</style></head><body>
+<header><h1>E-Learning Teknologi Informasi dan Komunikasi</h1>
+<p>PGMI Semester 5 · UIN Sulthan Thaha Saifuddin Jambi · Dosen: Heroza Firdaus, M.Pd</p>
+<div class="bar"><i id="pb"></i></div><p id="pt" style="margin:6px 0 0"></p></header>
+<div class="wrap"><nav><button class="btn alt" id="tg">☰ Daftar Pertemuan</button><div id="list"></div></nav><main id="m"></main></div>
+<script>
+// ====== DOSEN: isi link video YouTube per pertemuan di sini (contoh: 1:"https://youtu.be/xxxx") ======
+const VIDEO={};
+// ====== Link Zoom/Meet per pertemuan (opsional) ======
+const MEET={};
+const W=[
+[1,"Konsep Dasar TIK dalam Pendidikan","CPMK-1","Video pengenalan TIK, tugas membaca","Diskusi konsep, brainstorming aplikasi TIK","Refleksi jurnal digital","Essay \"TIK dalam Perspektif Islam\""],
+[2,"Sejarah dan Perkembangan TIK","CPMK-1","Artikel tren TIK pendidikan","Presentasi timeline, diskusi dampak","Analisis SWOT TIK pendidikan","Timeline perkembangan TIK"],
+[3,"Perangkat Keras Komputer","CPMK-2","Video tutorial hardware","Praktik assembly dan troubleshooting","Laporan praktik","Identifikasi spek komputer ideal"],
+[4,"Sistem Operasi dan Manajemen File","CPMK-2","Tutorial sistem operasi","Praktik manajemen file dan kustomisasi","Optimasi sistem personal","Setup workspace digital"],
+[5,"Word Processing untuk Pembelajaran","CPMK-3","Tutorial Word lanjutan","Praktik pembuatan RPP digital","Finalisasi template dokumen","Template RPP dan materi ajar"],
+[6,"Spreadsheet untuk Analisis Data","CPMK-3","Tutorial fungsi Excel","Analisis data nilai siswa","Dashboard pembelajaran","Analisis data kelas"],
+[7,"Presentation Tools Multimedia","CPMK-3","Best practices desain presentasi; catat minimal 5 prinsip desain","Pembuatan presentasi interaktif (Zoom/Meet)","Selesaikan presentasi, rekam latihan, beri umpan balik ke 2 teman","Media presentasi pembelajaran MI"],
+[8,"Ujian Tengah Semester (UTS)","CPMK 1-3","Pelajari materi minggu 1-7","Ujian teori dan praktik","Portfolio progress","Portfolio progress"],
+[9,"Internet dan Pencarian Informasi","CPMK-4","Tutorial pencarian lanjutan","Praktik pencarian akademik","Database sumber terpercaya","Repository sumber pembelajaran"],
+[10,"Cloud Computing untuk Pendidikan","CPMK-4","Tutorial Google Drive, OneDrive","Praktik cloud storage, sharing, kolaborasi","Setup cloud workspace pembelajaran","Proyek kolaboratif berbasis cloud"],
+[11,"Komunikasi Digital Profesional","CPMK-4","Panduan etiket email","Praktik komunikasi profesional (role play)","Latihan membangun jejaring","Template email profesional"],
+[12,"Media Sosial untuk Pendidikan","CPMK-4","Studi kasus konten viral edukatif","Pembuatan konten media sosial","Publikasi dan monitoring","Kampanye edukasi digital"],
+[13,"Etika Digital dalam Islam","CPMK-5","Kajian etika digital dalam Islam","Analisis dilema etika digital","Kode etik digital pribadi","Panduan etika digital Islami"],
+[14,"Keamanan Siber dan Privasi","CPMK-5","Tutorial dasar cybersecurity","Audit keamanan perangkat pribadi","Penerapan langkah keamanan","Protokol keamanan untuk sekolah"],
+[15,"Integrasi TIK dalam Pembelajaran MI","CPMK 1-5","Persiapan proyek akhir","Presentasi proyek integrasi","Peer evaluation dan refleksi","Portfolio lengkap TIK"],
+[16,"Ujian Akhir Semester (UAS)","CPMK 1-5","Persiapan portofolio","Showcase proyek, portfolio defense","-","Pengumpulan portofolio akhir"]];
+const Q=[
+{q:"Berapa jumlah teks yang ideal pada satu slide untuk siswa MI?",o:["Satu paragraf panjang","Poin singkat dan mudah dibaca","Seluruh isi buku","Tidak perlu teks sama sekali"],a:1,e:"Teks singkat membantu anak MI fokus; sisanya dijelaskan lisan."},
+{q:"Mana pasangan warna yang paling terbaca?",o:["Kuning di atas putih","Abu muda di atas putih","Teks gelap di atas latar terang (kontras tinggi)","Merah di atas hijau"],a:2,e:"Kontras tinggi membuat teks mudah dibaca."},
+{q:"Contoh unsur interaktif dalam presentasi adalah...",o:["Hyperlink tombol pilihan kuis","Slide berjumlah genap","Font Times New Roman","Nomor halaman"],a:0,e:"Hyperlink antar-slide membuat kuis bisa diklik siswa."},
+{q:"Sumber gambar dan musik untuk media ajar sebaiknya...",o:["Diambil dari mana saja","Bebas hak cipta dan dicantumkan sumbernya","Tanpa sumber","Hanya dari media sosial"],a:1,e:"Hormati hak cipta; cantumkan sumber di slide akhir."},
+{q:"Di bawah ini yang BUKAN prinsip desain presentasi yang baik adalah...",o:["Konsistensi font","Animasi berlebihan di semua slide","Gambar relevan","Tata letak rapi"],a:1,e:"Animasi berlebihan mengalihkan perhatian dari materi."}];
+const $=s=>document.querySelector(s);
+let cur=7,done={};
+try{done=JSON.parse(localStorage.getItem("tik_done")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("tik_done",JSON.stringify(done))}catch(e){}}
+function prog(){const n=Object.keys(done).filter(k=>done[k]).length;$("#pb").style.width=n/16*100+"%";$("#pt").textContent="Progres belajar: "+n+" dari 16 pertemuan selesai"}
+function list(){$("#list").innerHTML=W.map(w=>`<button class="item ${w[0]==cur?"on":""}" onclick="go(${w[0]})"><b>${w[0]}</b><span>${w[1]}</span><span class="d">${done[w[0]]?"✔":""}</span></button>`).join("")}
+function go(n){cur=n;$("#list").classList.remove("show");list();render();window.scrollTo(0,0)}
+function render(){const w=W.find(x=>x[0]==cur),v=VIDEO[cur],mt=MEET[cur];
+const yt="https://www.youtube.com/results?search_query="+encodeURIComponent(w[1]+" tutorial");
+let h=`<div class="card"><span class="tag">Pertemuan ${w[0]}</span><span class="tag">${w[2]}</span><h2>${w[1]}</h2><p class="exp">Alokasi: 2×70 menit · Mode daring</p></div>
+<div class="card"><h3>1. Sebelum kuliah (Pre-Class)</h3><p>${w[3]}</p>
+${v?`<a class="btn" href="${v}" target="_blank" rel="noopener">▶ Tonton video materi</a>`:`<span class="exp">Video materi belum ditambahkan dosen.</span><br>`}
+<a class="btn alt" href="${yt}" target="_blank" rel="noopener">Cari video referensi di YouTube</a></div>
+<div class="card"><h3>2. Saat kuliah (In-Class)</h3><p>${w[4]}</p>${mt?`<a class="btn" href="${mt}" target="_blank" rel="noopener">Masuk kelas online</a>`:`<span class="exp">Link Zoom/Meet akan dibagikan dosen.</span>`}</div>
+<div class="card"><h3>3. Setelah kuliah (Post-Class)</h3><p>${w[5]}</p></div>`;
+if(cur==7)h+=tugas7()+`<div class="card q"><h3>Kuis Latihan Pertemuan 7</h3><div id="qz"></div><button class="btn" onclick="cek()">Periksa Jawaban</button><p id="sk"></p></div>`;
+else h+=`<div class="card"><h3>Tugas</h3><p>${w[6]}</p></div>`;
+h+=`<div class="card"><label class="ck"><input type="checkbox" ${done[cur]?"checked":""} onchange="done[${cur}]=this.checked;save();prog();list()"> Tandai pertemuan ini selesai</label></div>`;
+$("#m").innerHTML=h;if(cur==7)quiz()}
+function tugas7(){return `<div class="card"><h3>Tugas: Media Presentasi Interaktif untuk Pembelajaran di MI</h3>
+<ul><li>Pilih satu mata pelajaran MI dan satu topik (kelas rendah 1-3 atau tinggi 4-6).</li>
+<li>Buat dengan PowerPoint, Canva, atau Google Slides: 8-12 slide (judul, tujuan, materi inti, aktivitas, kuis, penutup/refleksi).</li>
+<li>Minimal 4 unsur multimedia dan 1 unsur interaktif (kuis hyperlink / drag &amp; drop / tautan kuis online).</li>
+<li>Muat nilai Islami yang relevan; gunakan aset bebas hak cipta dan cantumkan sumber di slide akhir.</li>
+<li>Rekam video latihan presentasi 5-7 menit (wajah dan suara jelas).</li>
+<li>Beri umpan balik ke 2 teman (3-5 kalimat: 1 kelebihan, 1 saran).</li></ul>
+<p><b>Pengumpulan:</b> file .pptx/PDF atau tautan (akses "Anyone with the link") + tautan video (unlisted). Nama file: <code>TIK_Pert7_NamaLengkap_NIM</code>. Individu.</p>
+<div class="sc"><table><tr><th>Aspek</th><th>Bobot</th></tr><tr><td>Kesesuaian materi</td><td>20%</td></tr><tr><td>Desain visual</td><td>20%</td></tr><tr><td>Multimedia &amp; interaktivitas</td><td>25%</td></tr><tr><td>Kreativitas &amp; nilai Islami</td><td>15%</td></tr><tr><td>Presentasi (video latihan)</td><td>15%</td></tr><tr><td>Umpan balik teman</td><td>5%</td></tr></table></div></div>`}
+let ans=[];
+function quiz(){ans=[];$("#qz").innerHTML=Q.map((x,i)=>`<div class="q"><p>${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" id="o${i}_${j}" onclick="pick(${i},${j})">${o}</button>`).join("")}<div class="exp" id="e${i}"></div></div>`).join("")}
+function pick(i,j){Q[i].o.forEach((_,k)=>$("#o"+i+"_"+k).classList.remove("sel"));ans[i]=j;Q[i].o.forEach((_,k)=>{$("#o"+i+"_"+k).style.outline=k==j?"2px solid var(--pri)":"none"})}
+function cek(){let s=0;Q.forEach((x,i)=>{x.o.forEach((_,k)=>{const b=$("#o"+i+"_"+k);b.style.outline="none";b.classList.remove("ok","no")});if(ans[i]==x.a){s++;$("#o"+i+"_"+x.a).classList.add("ok")}else{if(ans[i]!=null)$("#o"+i+"_"+ans[i]).classList.add("no");$("#o"+i+"_"+x.a).classList.add("ok")}$("#e"+i).textContent=x.e});$("#sk").innerHTML="<b>Skor: "+s*20+" / 100</b> ("+s+" dari 5 benar)"}
+$("#tg").onclick=()=>$("#list").classList.toggle("show");
+list();render();prog();
+</script></body></html>
